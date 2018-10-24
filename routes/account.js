@@ -13,6 +13,7 @@ var isAuthenticated = require('../middlewares/isAuthenticated')
     var dbU = new User({ username: u , password: p})
     dbU.save(function (err, result) {
       if (!err) {
+        req.session.user = u
         res.redirect('/');
       } else {
         next(new Error(send('something went wrong: ' + err.message)))

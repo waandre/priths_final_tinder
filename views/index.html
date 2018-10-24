@@ -14,6 +14,10 @@
       <p>Hi <%= user %> | 
       <a href="/account/logout">Log out</a>
       </p>
+      <% } else { %>
+        <p>
+          <a href="/account/signup">Sign up</a>
+        </p>
       <% } %>
     </div>
     <div class="main-body">
