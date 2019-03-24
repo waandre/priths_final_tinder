@@ -12,7 +12,6 @@ router.get('/:user', function(req, res, next) {
   })
 });
 
-
 router.get('/all/:user', function(req, res, next) {
   User.find( {name: {$ne: req.params.user}}, function(err, data) {
     res.json(data)
