@@ -3,21 +3,18 @@ var express = require('express')
 var path = require('path')
 var bodyParser = require('body-parser')
 var cookieSession = require('cookie-session')
-var accountRoutes = require('./routes/account.js')
-var apiRoutes = require('./routes/api')
+var index = require('./routes/index');
 var mongoose = require('mongoose')
-var Question = require('./models/question');
-var isAuthenticated = require('./middlewares/isAuthenticated')
-
-
 
 // instantiate express app...TODO: make sure that you have required express
 var app = express();
 // instantiate a mongoose connect call
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/hw5-new')
-
+// mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/hw5-new')
+mongoose.connect(process.env.MONGODB_URI ||'mongodb://user:pass123@ds117145.mlab.com:17145/priths_data', {useNewUrlParser: true})
 // set the express view engine to take care of ejs within html files
 app.engine('html', require('ejs').__express);
+app.set('views', path.join(__dirname, 'views'));
+
 app.set('view engine', 'html');
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -31,30 +28,11 @@ app.use(cookieSession({
   maxAge: 24 * 60 * 60 * 1000 // 24 hours
 }))
 
-app.get('/', function (req, res, next) {
-  Question.find({}, function (err, results) {
-    if (!err) {
-      res.render('index', { questions: results, user: req.session.user })
-    } else {
-        next(new Error(err.message))
-    }
-  })
-});
+// app.get('/', function (req, res, next) {
+//   res.render('index')
+// })
 
-app.post('/', isAuthenticated, function (req, res, next) {
-  var q = req.body.question;
-  var dbQ = new Question({ questionText: q, author: req.session.user})
-  dbQ.save(function (err, result) {
-    if (!err) {
-      res.redirect('/');
-    } else {
-      next(new Error('something went wrong: ' + err.message))
-    }
-  })
-})
-
-app.use('/account', accountRoutes);
-app.use('/api', apiRoutes);
+app.use('/', index);
 
 // don't put any routes below here!
 app.use(function (err, req, res, next) {

@@ -1,66 +1,73 @@
-<html>
-  <head>
-    <title>cis197 piazza lite</title>
-    <!-- new  stuff -->
-    <script src="/static/scripts/lib/jquery.min.js"></script>
-    <script src="/static/scripts/main.js"></script>
-    <link rel="stylesheet" type="text/css" href="/static/styles/styles.css"/>
-    
-  </head>
-  <body>
-    <div class="nav">
-      <h2>Piazza Lite</h2>
-      <% if (user) { %>
-      <p>Hi <%= user %> | 
-      <a href="/account/logout">Log out</a>
-      </p>
-      <% } else { %>
-        <p>
-          <a href="/account/signup">Sign up</a>
-        </p>
-      <% } %>
-    </div>
-    <div class="main-body">
-      <div class="left-col">
-      <% if (user) { %>
-      <a href="#" class="btn" id="new-question">Add new Question + </a>
-      <!-- modal for adding new question -->
-      <div class="modal" style="display:none">
-        <div class="question-area">
-          <textarea type="text" id="question-text">
-          Add Question: 
-          </textarea>
-          <a class="btn" type="submit" id="submit-question">Submit Question</a>
-          <a class="btn" id="close-modal">Close</a>
-        </div>
-      </div>
-      <% } else { %>
-      <a class="btn" href="/account/login">Log in to submit a question</a>
-      <% } %>
-      <ul id="questions">
-        <% if (typeof questions == 'object') { %>
-          <% questions.forEach(function(q) { %>
-          <li data-qid=<%= q.id %>><%= q.questionText %></li>
-          <% }) 
-        } %>
-      </ul>
-      </div>
-          
-      <!-- where a question is displayed -->
-      <div class="right-col">
-        <div id="show-question" style="display:none">
-            <div id="question-info">
-              <p id="question"></p>
-              Author: <p id="author"></p>
-              Answer: <p id="answer-text"></p>
+<!DOCTYPE html>
+<html ng-app="angularjsNodejsTutorial">
+    <head>
+        <title>Prith's Tinder</title>
+        <script src="/static/scripts/lib/jquery.min.js"></script>
+        <script src="/static/scripts/lib/angular.js"></script>
+        <script src="/static/scripts/main.js"></script>
+        <link rel="stylesheet" type="text/css" href="/static/styles/styles.css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    </head>
+    <body data-spy="scroll" data-target=".scrollspy">
+        <header></header>
+        <!-- Static navbar-->
+        <nav role="navigation" class="navbar navbar-static-top navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button><a href="#" class="navbar-brand">Prith's Class Tinder</a></div>
             </div>
-            <br/><br/>
-            <% if (user) { %>
-            <textarea id="answer"></textarea>
-            <a class="btn" type="submit" id="submitAnswer">Submit Answer</a>
-            <% } %>
+        </nav>
+         <div class="container">
+            <!-- Main component for a primary marketing message or call to action-->
+            <div class="jumbotron">
+                <div ng-controller="myController">
+                    <p><span aria-hidden="true" class="glyphicon text-primary glyphicon-search"></span> Enter Name:
+                        <input name="user" ng-model="user" value="">
+                        <button type="button" ng-click="Submit()" class="button">Start Matching!</button>
+                    </p>
+                    <div ng-if="data.length > 0 && !voted">
+                        <table border="0" cellpadding="10" cellspacing="1" width="500" align="center"> 
+                            <tr> 
+                                <td> Picture </td>
+                                <td> Name </td>
+                                <td> Profile </td>
+                            </tr>
+                            <tr > 
+                                <td> <img ng-src="{{data[current].picture}}" alt="Description" height="42" width="42"></td>
+                                <td> {{data[current].name}} </td>
+                                <td> {{data[current].sex}} </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div ng-if="data.length > 0 && !voted">
+                        Like: <input type="radio" name="pref" ng-model="pref.val" value="true">
+                        Dislike: <input type="radio" name="pref" ng-model="pref.val" value="false">
+                        <button type="button" ng-click="Next()" class="button">Next</button>
+                    </div>
+                    <div ng-if="data.length > 0 && voted">
+                            <h3>Matches:</h3>
+                            <table border="0" cellpadding="10" cellspacing="1" width="500" align="center"> 
+                                <tr> 
+                                    <td> Picture </td>
+                                    <td> Name </td>
+                                    <td> Profile </td>
+                                </tr>
+                                <tr ng-repeat="x in data"> 
+                                    <td> <img ng-src="{{x.picture}}" alt="Description" height="42" width="42"></td>
+                                    <td> {{x.name}} </td>
+                                    <td> {{x.sex}} </td>
+                                </tr>
+                            </table>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </body>
+    </body>
 </html>
